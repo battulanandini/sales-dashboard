@@ -18,24 +18,34 @@ df = load_data()
 
 # ── Sidebar Filters ───────────────────────────────────────
 st.sidebar.title("🔍 Filters")
+st.sidebar.caption("Select at least one option in each filter to see results.")
 
 year = st.sidebar.multiselect(
     "Select Year:",
-    options=sorted(df['Year'].unique()),
-    default=sorted(df['Year'].unique())
+    options=sorted(df['Year'].unique())
+    # no default → starts empty
 )
 
 region = st.sidebar.multiselect(
     "Select Region:",
-    options=df['Region'].unique(),
-    default=df['Region'].unique()
+    options=df['Region'].unique()
+    # no default → starts empty
 )
 
 category = st.sidebar.multiselect(
     "Select Category:",
-    options=df['Category'].unique(),
-    default=df['Category'].unique()
+    options=df['Category'].unique()
+    # no default → starts empty
 )
+
+# ── Title ─────────────────────────────────────────────────
+st.title("📊 Sales Dashboard — Superstore")
+st.markdown("---")
+
+# ── Stop here and show a message if filters are empty ─────
+if not year or not region or not category:
+    st.info("👈 Please select at least one **Year**, **Region**, and **Category** from the sidebar to view the dashboard.")
+    st.stop()
 
 # ── Filter Data ───────────────────────────────────────────
 df_filtered = df[
@@ -43,10 +53,6 @@ df_filtered = df[
     (df['Region'].isin(region)) &
     (df['Category'].isin(category))
 ]
-
-# ── Title ─────────────────────────────────────────────────
-st.title("📊 Sales Dashboard — Superstore")
-st.markdown("---")
 
 # ── KPI Cards ─────────────────────────────────────────────
 col1, col2, col3, col4 = st.columns(4)
